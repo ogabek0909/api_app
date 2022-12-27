@@ -1,21 +1,22 @@
 import 'package:api_app/services/quiz_api.dart';
-import 'package:api_app/widgets/topics.dart';
+import 'package:api_app/widgets/question.dart';
 import 'package:flutter/material.dart';
 
-class TopicsPage extends StatelessWidget {
+class QuestionPage extends StatelessWidget {
   final int id;
-  const TopicsPage({super.key, required this.id});
+  final String topicName;
+
+  const QuestionPage({super.key, required this.topicName, required this.id});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text('Topics'),
+        title: Text(topicName),
       ),
       body: FutureBuilder(
-        future: Services.getTopic(id: id),
+        future: Services.getQuestion(id: id),
         builder: (context, snapshot) {
-          print(snapshot.connectionState);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -23,7 +24,7 @@ class TopicsPage extends StatelessWidget {
               child: Text('Error'),
             );
           } else {
-            return TopicsWidget(topics: snapshot.data);
+            return QuizWidget(questions: snapshot.data['topic']['questions']);
           }
         },
       ),

@@ -1,6 +1,6 @@
 import 'package:api_app/services/quiz_api.dart';
 import 'package:api_app/widgets/subjects.dart';
-import 'package:api_app/widgets/widget.dart';
+import 'package:api_app/widgets/question.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,20 +30,18 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text('Quiz Application'),
         ),
-        body: Container(
-          child: FutureBuilder(
-            future: getQuiz(),
-            builder: (context,AsyncSnapshot snapshot) {
-              print(snapshot.connectionState);
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if(snapshot.hasError){
-                return Center(child: Text('Error'),);
-              }else{
-                return Subjects(subjects: snapshot.data);
-              }
-            },
-          ),
+        body: FutureBuilder(
+          future: Services.getQuiz(),
+          builder: (context,AsyncSnapshot snapshot) {
+            print(snapshot.connectionState);
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if(snapshot.hasError){
+              return const Center(child: Text('Error'),);
+            }else{
+              return Subjects(subjects: snapshot.data);
+            }
+          },
         ));
   }
 }
